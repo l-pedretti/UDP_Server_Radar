@@ -33,7 +33,7 @@
 * Macros
 ********************************************************************************/
 /* MQTT Broker/Server address and port used for the MQTT connection. */
-#define MQTT_BROKER_ADDRESS               "broker.hivemq.com"
+#define MQTT_BROKER_ADDRESS               "192.168.1.125"
 #define MQTT_PORT                         1883
 
 /* Set this macro to 1 if a secure (TLS) connection to the MQTT Broker is
@@ -55,7 +55,7 @@
 /* Set the QoS that is associated with the MQTT publish, and subscribe messages.
  * Valid choices are 0, 1, and 2. Other values should not be used in this macro.
  */
-#define MQTT_MESSAGES_QOS                 ( 1 )
+#define MQTT_MESSAGES_QOS                 ( 0 )
 
 /* Configuration for the 'Last Will and Testament (LWT)'. It is an MQTT message
  * that will be published by the MQTT broker if the MQTT connection is

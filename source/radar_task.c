@@ -92,6 +92,8 @@ static float32_t avg_chirp[NUM_SAMPLES_PER_CHIRP];
 
 static publisher_data_t publisher_q_data;
 static publisher_data_t * publisher_msg = &publisher_q_data;
+static publisher_data_t publisher_v_data;
+static publisher_data_t * publisher_v_msg = &publisher_v_data;
 /*******************************************************************************
  * Local Variables
  ******************************************************************************/
@@ -427,16 +429,18 @@ void radar_task(void *pvParameters)
             }
 
             arm_scale_f32(avg_chirp, 1.0f / NUM_CHIRPS_PER_FRAME, avg_chirp, NUM_SAMPLES_PER_CHIRP);
-
+            
+        
             //publish avg_chirp values on mqtt topic
             for (int c = 0; c < NUM_CHIRPS_PER_FRAME; c++)
             {
+                publisher_v_data.cmd = PUBLISH_MQTT_MSG;
+                publisher_v_data.topic = RADAR_VALUES;
                 //printf("%.4f\n", avg_chirp[c]);
-                publisher_q_data.cmd = PUBLISH_MQTT_MSG;
-                publisher_q_data.topic = RADAR_VALUES;
-                snprintf(publisher_q_data.data, sizeof(publisher_q_data.data), "%.2f\n", avg_chirp[c]);
-                xQueueSendToBack(publisher_task_q, &publisher_msg, 0 );
+                snprintf(publisher_v_data.data, sizeof(publisher_v_data.data), "%.2f\n", avg_chirp[c]);
+                xQueueSendToBack(publisher_task_q, &publisher_v_msg, 0 );
             }
+
 
             if (xSemaphoreTake(sem_radar_presence, portMAX_DELAY) == pdTRUE)
             {
