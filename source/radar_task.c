@@ -437,7 +437,7 @@ void radar_task(void *pvParameters)
                 publisher_v_data.cmd = PUBLISH_MQTT_MSG;
                 publisher_v_data.topic = RADAR_VALUES;
                 //printf("%.4f\n", avg_chirp[c]);
-                snprintf(publisher_v_data.data, sizeof(publisher_v_data.data), "%.2f\n", avg_chirp[c]);
+                snprintf(publisher_v_data.data, sizeof(publisher_v_data.data), "%.4f\n", avg_chirp[c]);
                 xQueueSendToBack(publisher_task_q, &publisher_v_msg, 0 );
             }
 
