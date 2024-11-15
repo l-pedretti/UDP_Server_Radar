@@ -33,7 +33,7 @@
 * Macros
 ********************************************************************************/
 /* MQTT Broker/Server address and port used for the MQTT connection. */
-#define MQTT_BROKER_ADDRESS               "192.168.1.125"
+#define MQTT_BROKER_ADDRESS               "192.168.1.7"
 #define MQTT_PORT                         1883
 
 /* Set this macro to 1 if a secure (TLS) connection to the MQTT Broker is
