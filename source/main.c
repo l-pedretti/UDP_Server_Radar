@@ -1,12 +1,14 @@
 /******************************************************************************
 * File Name:   main.c
 *
-* Description: This is the source code for MQTT Client Example for ModusToolbox.
+* Description: This is the source code for UDP Server Example in ModusToolbox.
+*              In this example, UDP server waits for a connection with a UDP
+*              client. Once a message is received from UDP client, the server
 *
 * Related Document: See README.md
 *
 *******************************************************************************
-* Copyright 2020-2021, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2020-2022, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -42,15 +44,41 @@
 #include "cyhal.h"
 #include "cybsp.h"
 #include "cy_retarget_io.h"
-#include "mqtt_task.h"
+
 #include "rtos_artifacts.h"
+
+/* UDP server task header file. */
+#include "udp_server.h"
+#include "radar_task.h"
+
+/*******************************************************************************
+* Function Name: handle_error
+********************************************************************************
+* Summary:
+* User defined error handling function.
+*
+* Parameters:
+*  void
+*
+* Return:
+*  void
+*
+*******************************************************************************/
+void handle_error(void)
+{
+     /* Disable all interrupts. */
+    __disable_irq();
+
+    CY_ASSERT(0);
+}
+
 
 /******************************************************************************
  * Function Name: main
  ******************************************************************************
  * Summary:
  *  System entrance point. This function initializes retarget IO, sets up 
- *  the MQTT client task, and then starts the RTOS scheduler.
+ *  the UDP server task, and then starts the RTOS scheduler.
  *
  * Parameters:
  *  void
@@ -62,6 +90,14 @@
 int main()
 {
     cy_rslt_t result;
+
+	#if defined(CY_DEVICE_SECURE)
+		cyhal_wdt_t wdt_obj;
+		/* Clear watchdog timer so that it doesn't trigger a reset */
+		result = cyhal_wdt_init(&wdt_obj, cyhal_wdt_get_max_timeout_ms());
+		CY_ASSERT(CY_RSLT_SUCCESS == result);
+		cyhal_wdt_free(&wdt_obj);
+	#endif
 
     /* Initialize the board support package. */
     result = cybsp_init();
@@ -77,15 +113,31 @@ int main()
     cy_retarget_io_init(CYBSP_DEBUG_UART_TX, CYBSP_DEBUG_UART_RX,
                         CY_RETARGET_IO_BAUDRATE);
 
+	if (result != CY_RSLT_SUCCESS)
+	{
+		handle_error();
+	}
+
+	#ifdef TARGET_CYSBSYSKIT_DEV_01
+
+		/* Initialize the User LED */
+		cyhal_gpio_init(CYBSP_USER_LED, CYHAL_GPIO_DIR_OUTPUT, CYHAL_GPIO_DRIVE_STRONG, CYBSP_LED_STATE_OFF);
+
+	#endif
+
     /* \x1b[2J\x1b[;H - ANSI ESC sequence to clear screen. */
     printf("\x1b[2J\x1b[;H");
     printf("===============================================================\n");
-    printf("MQTT client: Human Presence Detection\n");
+    printf(" - UDP Server with Radar Range Doppler Map\n");
     printf("===============================================================\n\n");
 
-    /* Create the MQTT Client task. */
-    xTaskCreate(mqtt_client_task, "MQTT Client task", MQTT_CLIENT_TASK_STACK_SIZE,
-                NULL, MQTT_CLIENT_TASK_PRIORITY, NULL);
+
+    /* Create the tasks. */
+    if(pdPASS != xTaskCreate(udp_server_task, "UDP server task", UDP_SERVER_TASK_STACK_SIZE, NULL,
+               UDP_SERVER_TASK_PRIORITY, NULL))
+    {
+        printf("Failed to create UDP server task!\n");
+    }
 
     /* Start the FreeRTOS scheduler. */
     vTaskStartScheduler();

@@ -32,19 +32,22 @@
  * Macros
  ******************************************************************************/
 #define RADAR_TASK_NAME       "RADAR PRESENCE TASK"
-#define RADAR_TASK_STACK_SIZE (1024 * 4)
+#define RADAR_TASK_STACK_SIZE (1024 * 4) * 3 //for 64*64*3 data size
 #define RADAR_TASK_PRIORITY   (3)
 
-/*******************************************************************************
- * Global Variables
- ******************************************************************************/
+#define RESULT_SUCCESS  (0)
+#define RESULT_ERROR    (-1)
 
+#define RADAR_DATA_COMMAND  (1)
+#define DUMMY_BYTE          (0xFF)
 
 /*******************************************************************************
  * Functions
  ******************************************************************************/
 void radar_task(void *pvParameters);
-void radar_task_cleanup(void);
+void preprocessing_task(void *pvParameters);
+int32_t radar_start(bool start);
+int32_t radar_enable_test_mode(bool start);
 
-#endif
+#endif /* RADAR_TASK_H_ */
 /* [] END OF FILE */

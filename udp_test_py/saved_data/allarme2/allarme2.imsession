@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ImagimobStudio version="0.9">
+  <Timeline id="f05316fc-7e98-4141-8cba-8aef2336ad10">
+    <Tracks>
+      <Track name="antenna1_data" type="datacsv" isLabelTrack="False">
+        <PayloadFile>antenna1_data.csv</PayloadFile>
+      </Track>
+      <Track name="antenna2_data" type="datacsv" isLabelTrack="False">
+        <PayloadFile>antenna2_data.csv</PayloadFile>
+      </Track>
+      <Track name="antenna3_data" type="datacsv" isLabelTrack="False">
+        <PayloadFile>antenna3_data.csv</PayloadFile>
+      </Track>
+      <Track name="label" type="labelcsv">
+        <PayloadFile>label.label</PayloadFile>
+      </Track>
+    </Tracks>
+  </Timeline>
+</ImagimobStudio>

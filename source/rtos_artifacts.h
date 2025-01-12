@@ -29,6 +29,7 @@
 #define SOURCE_RTOS_ARTIFACTS_H_
 
 
+
 /* Header file includes */
 #include "FreeRTOS.h"
 #include "semphr.h"
@@ -44,39 +45,23 @@
 /*******************************************************************************
  * Global Variables
  ******************************************************************************/
-/* FreeRTOS task handle for radar task which performs radar data acquisition,
- *  runs presence algorithm, and puts presence events in publisher queue */
+
+/* FreeRTOS task handle for radar task which performs radar configurations,
+ * data acquisition, and forwards the frame data to udp server queue */
 extern TaskHandle_t radar_task_handle;
 
-/* FreeRTOS task handle for publisher task which receives messages in
- * publisher queue and transmits them to mqtt broker */
-extern TaskHandle_t publisher_task_handle;
-
-/* FreeRTOS task handle for subscriber task which subscribes to given topics
- * and receives data from remote broker*/
-extern TaskHandle_t subscriber_task_handle;
-
 /* FreeRTOS task handle for radar configuration task which receives messages
- * in subscriber queue, parse them. updates presence configuration, and send
- * status to publish queue */
+ * in configuration queue, parse them, and updates radar operation */
+
 extern TaskHandle_t radar_config_task_handle;
 
-/* FreeRTOS queue handle for mqtt task queue used for mqtt related events */
-extern QueueHandle_t mqtt_task_q;
+/* FreeRTOS queue handle to forward radar data */
+extern QueueHandle_t radar_data_queue;
 
-/* FreeRTOS queue handle for publisher queue used to send/receive publish data */
-extern QueueHandle_t publisher_task_q;
+/* FreeRTOS queue handle for udp server callback queue used for radar mode */
+extern QueueHandle_t radar_config_queue;
 
-/* FreeRTOS queue handle for subscriber queue used to send/receive data to subscriber task */
-extern QueueHandle_t subscriber_task_q;
-
-/* FreeRTOS queue handle for subscriber_callback queue used for presence configuration */
-extern QueueHandle_t subscriber_msg_q;
-
-/* FreeRTOS semaphore handle to update/consume presence configuration data form subscriber topic */
-extern SemaphoreHandle_t sem_sub_payload;
-
-/* FreeRTOS semaphore handle to run/reset presence application */
-extern SemaphoreHandle_t sem_radar_presence;
+/* FreeRTOS semaphore handle to update/consume radar mode data form udp client*/
+extern SemaphoreHandle_t sem_udp_payload;
 
 #endif /* SOURCE_RTOS_ARTIFACTS_H_ */

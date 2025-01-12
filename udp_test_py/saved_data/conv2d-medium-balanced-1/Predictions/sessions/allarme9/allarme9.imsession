@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ImagimobStudio>
+  <Timeline id="500239fc-fb59-4a5b-8728-493f63a670cf">
+    <Tracks>
+      <Track name="conv2d-medium-balanced-10" type="datacsv" timecoded="TimestampBeginDuration">
+        <PayloadFile TrackType="Prediction">conv2d-medium-balanced-10.data</PayloadFile>
+        <Offset unit="seconds">2.617771</Offset>
+      </Track>
+      <Track name="preprocessed_label" type="datacsv">
+        <PayloadFile TrackType="Prediction">preprocessed_label.data</PayloadFile>
+        <Offset unit="seconds">2.617771</Offset>
+      </Track>
+      <Track name="conv2d-medium-balanced-1_grad" type="videomp4">
+        <PayloadFile>conv2d-medium-balanced-1_grad.mp4</PayloadFile>
+      </Track>
+    </Tracks>
+  </Timeline>
+</ImagimobStudio>
